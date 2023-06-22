@@ -30,7 +30,7 @@ const people = [
         linkPhoto:
             "https://static1.undiksha.ac.id/siakng/2023/fotomahasiswa/494792644-1676541672.png",
         linkCard:
-            "/src/src/assets/images/tentang/id-card/NiPutuAshyaSivaMarshanda.png",
+            "/src/assets/images/tentang/id-card/NiPutuAshyaSivaMarshanda.png",
     },
     {
         name: "Kadek Yesi Citrayani",
