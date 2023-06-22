@@ -6,9 +6,20 @@ const Dashboard = () => {
     return (
         <div id="dashboard" className="pt-12 pb-20 px-2">
             <div className="flex justify-center items-center mx-auto max-w-screen-xl">
-                <div className="flex flex-wrap-reverse">
-                    <div className="w-full self-center px-4 lg:w-1/2">
-                        <h1 className="text-slate-900 block font-bold text-3xl mb-7 mt-7 lg:mt-0 xl:mt-0 lg:text-4xl text-center lg:text-left xl:text-left">
+                <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-row-1 content-center">
+                    <div className="w-full self-end px-4 order-first xl:order-last lg:order-last md:order-last sm:order-first">
+                        <div className="relative">
+                            <img
+                                src={ImageDashboard}
+                                alt="Bali"
+                                className="w-100 rounded-tl-full rounded-tr-full md:rounded-xl lg:rounded-tl-full lg:rounded-tr-full shadow-lg w-full mx-auto hover:scale-105 transition duration-300 ease-in-out"
+                                onContextMenu={(e) => e.preventDefault()}
+                                draggable="false"
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full self-center px-4">
+                        <h1 className="text-slate-900 block font-bold text-3xl mb-7 mt-7 lg:mt-0 xl:mt-0 lg:text-4xl text-center md:text-left lg:text-left xl:text-left">
                             Selamat Datang di Website KKNT
                         </h1>
                         <TypeAnimation
@@ -38,17 +49,6 @@ const Dashboard = () => {
                         >
                             Lihat Selengkapnya
                         </Link>
-                    </div>
-                    <div className="w-full self-end px-4 lg:w-1/2">
-                        <div className="relative">
-                            <img
-                                src={ImageDashboard}
-                                alt="Bali"
-                                className="w-100 rounded-tl-full rounded-tr-full shadow-lg w-full mx-auto hover:scale-105 transition duration-300 ease-in-out"
-                                onContextMenu={(e) => e.preventDefault()}
-                                draggable="false"
-                            />
-                        </div>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Desaku from "./pages/Desaku";
 import Program from "./pages/Program";
 import Blog from "./pages/Blog";
-import About from "./pages/About";
+import Tentang from "./pages/Tentang";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HandlePage404 from "./pages/HandlePage";
@@ -19,7 +19,7 @@ function App() {
                 <Route path="/desaku" element={<Desaku />} />
                 <Route path="/program" element={<Program />} />
                 <Route path="/blog" element={<Blog />} />
-                <Route path="/tentang" element={<About />} />
+                <Route path="/tentang" element={<Tentang />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="*" element={<HandlePage404 />} />

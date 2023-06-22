@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Page404 from "../assets/images/handling-page/404.gif";
 
-const HandlePage404 = () => {
+function HandlePage404() {
     return (
         <div className="flex flex-col items-center justify-center mt-5 mb-20">
             <img
@@ -21,5 +21,5 @@ const HandlePage404 = () => {
             </button>
         </div>
     );
-};
+}
 export default HandlePage404;
