@@ -1,81 +1,29 @@
 import { Link } from "react-router-dom";
-
-const blog = [
-    {
-        id: "1",
-        title: "Blog Pertama",
-        createdAt: "Rabu, 21 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Songan",
-        linkDetail: "/detail-blog/1",
-    },
-    {
-        id: "2",
-        title: "Blog Kedua",
-        createdAt: "Kamis, 22 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Songan+Kintamani",
-        linkDetail: "/detail-blog/2",
-    },
-    {
-        id: "3",
-        title: "Blog Ketiga",
-        createdAt: "Jumat, 23 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Songan+Bangli",
-        linkDetail: "/detail-blog/3",
-    },
-    {
-        id: "4",
-        title: "Blog Keempat",
-        createdAt: "Sabtu, 24 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Songan+Bali",
-        linkDetail: "/detail-blog/4",
-    },
-    {
-        id: "5",
-        title: "Blog Kelima",
-        createdAt: "Minggu, 25 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Bali+Songan",
-        linkDetail: "/detail-blog/5",
-    },
-    {
-        id: "6",
-        title: "Blog Keenam",
-        createdAt: "Senin, 26 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Kintamani+Songan",
-        linkDetail: "/detail-blog/6",
-    },
-    {
-        id: "7",
-        title: "Blog Ketujuh",
-        createdAt: "Selasa, 27 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Bangli+Songan",
-        linkDetail: "/detail-blog/7",
-    },
-    {
-        id: "8",
-        title: "Blog Kedelapan",
-        createdAt: "Rabu, 28 Juni 2023",
-        author: "Gelgel",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti blanditiis omnis veniam debitis non adipisci laudantium! Atque ab ipsa eos inventore voluptatibus, voluptatem, impedit suscipit praesentium corporis, aliquid beatae optio!",
-        imageUrl: "https://source.unsplash.com/480x480/?Bali+Songan",
-        linkDetail: "/detail-blog/8",
-    },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { base_api_url } from "../App";
 
 export default function Blog() {
+    const [posts, setPosts] = useState<Post[]>([]);
+
+    interface Post {
+        id: number;
+        image: string;
+        created_at: string;
+        author: {
+            username: string;
+        };
+        title: string;
+        news_content: string;
+    }
+
+    useEffect(() => {
+        axios.get(base_api_url + "/api/posts").then((response) => {
+            const postData = response.data.data;
+            setPosts(postData);
+        });
+    }, []);
+
     return (
         <section className="bg-white">
             <div className="mt-10 px-6">
@@ -88,14 +36,18 @@ export default function Blog() {
                     </h1>
                 </div>
                 <div className="mx-auto max-w-screen-xl grid xl:grid-cols-4 xl:gap-6 lg:grid-cols-3 lg:gap-5 md:grid-cols-2 md:gap-6">
-                    {blog.map((value) => (
+                    {posts.map((post) => (
                         <div
-                            key={value.title}
+                            key={post.id}
                             className="bg-white rounded-xl shadow-lg overflow-hidden mb-6"
                         >
                             <div id="imageUrl" className="">
                                 <img
-                                    src={value.imageUrl}
+                                    src={
+                                        base_api_url +
+                                        "/storage/image/" +
+                                        post.image
+                                    }
                                     className="object-cover h-48 w-full"
                                     onContextMenu={(e) => e.preventDefault()}
                                     draggable="false"
@@ -107,7 +59,7 @@ export default function Blog() {
                                     className="flex justify-between items-center ml-6 mt-3"
                                 >
                                     <span className="text-[11px] font-bold text-slate-600 rounded-md">
-                                        {value.createdAt}
+                                        {post.created_at}
                                     </span>
                                 </div>
                                 <div
@@ -116,7 +68,7 @@ export default function Blog() {
                                 >
                                     <span className="text-[10px] font-bold bg-slate-300 text-slate-600 p-2 rounded-md">
                                         <p className="truncate">
-                                            {value.author}
+                                            {post.author.username}
                                         </p>
                                     </span>
                                 </div>
@@ -128,17 +80,17 @@ export default function Blog() {
                                         to=""
                                         className="block mb-3 font-semibold text-lg text-slate-900 transition 0.3s ease-in-out hover:text-slate-900 truncate"
                                     >
-                                        {value.title}
+                                        {post.title}
                                     </Link>
                                 </h3>
                                 <div id="desc" className="truncate">
                                     <p className="text-sm mb-2 text-slate-600">
-                                        {value.desc}
+                                        {post.news_content}
                                     </p>
                                 </div>
                                 <Link
                                     id="linkDetail"
-                                    to={value.linkDetail}
+                                    to={"posts/" + post.id}
                                     className="flex items-center font-bold text-sm text-slate-600 transition 0.3s ease-in-out hover:text-slate-900"
                                 >
                                     Baca selengkapnya

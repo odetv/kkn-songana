@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
 import LogoKKN from "../assets/images/header-footer-logo/logo-kknsongana.png";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 export default function Register() {
+    const navigate = useNavigate();
+    const { authenticatedUser } = useContext(UserContext);
+
+    useEffect(() => {
+        if (authenticatedUser) {
+            navigate("/");
+        }
+    }, [authenticatedUser, navigate]);
+
     return (
         <div className="flex flex-col justify-center items-center h-screen px-6 py-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -28,6 +40,7 @@ export default function Register() {
                         </label>
                         <div className="mt-2">
                             <input
+                                placeholder="Nama Lengkap"
                                 id="nama"
                                 name="nama"
                                 type="nama"
@@ -46,6 +59,7 @@ export default function Register() {
                         </label>
                         <div className="mt-2">
                             <input
+                                placeholder="Email Address"
                                 id="email"
                                 name="email"
                                 type="email"
@@ -66,6 +80,7 @@ export default function Register() {
                         </div>
                         <div className="mt-2">
                             <input
+                                placeholder="Password"
                                 id="password"
                                 name="password"
                                 type="password"
@@ -78,7 +93,7 @@ export default function Register() {
 
                     <div>
                         <button
-                            type="submit"
+                            type="button"
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             Buat akun

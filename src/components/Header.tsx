@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useContext } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
     Bars3Icon,
@@ -9,6 +9,12 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import LogoKKN from "../assets/images/header-footer-logo/logo-kknsongana.png";
 import { useLocation } from "react-router-dom";
+import { UserContext } from "../App";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { base_api_url } from "../App";
 
 const module = [
     {
@@ -37,6 +43,33 @@ const classNames = (...classes: string[]) => {
 };
 
 const Header = () => {
+    const { authenticatedUser, setAuthenticatedUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        setAuthenticatedUser(null);
+        toast.success("Logout Berhasil!");
+
+        axios
+            .post(
+                base_api_url + "/api/logout",
+                {},
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${new Cookies().get(
+                            "Authorization"
+                        )}`,
+                    },
+                }
+            )
+            .then(() => {
+                setTimeout(() => {
+                    navigate("/");
+                }, 0);
+            });
+    };
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const handleMenuClick = () => {
         setMobileMenuOpen(false);
@@ -153,23 +186,50 @@ const Header = () => {
                         Tentang
                     </Link>
                 </Popover.Group>
-                <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <button className="text-indigo-600 border-indigo-300 border hover:bg-indigo-300 hover:text-white font-bold py-2 px-4 rounded-xl mr-2 transition duration-300 ease-in-out">
-                        <Link
-                            to="/register"
-                            className="text-sm font-semibold leading-6"
-                        >
-                            Register
-                        </Link>
-                    </button>
-                    <button className="bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out">
-                        <Link
-                            to="/login"
-                            className="text-sm font-semibold leading-6 text-white"
-                        >
-                            Login
-                        </Link>
-                    </button>
+                <div className="auth hidden lg:flex lg:flex-1 lg:justify-end">
+                    {!authenticatedUser ? (
+                        <>
+                            <button
+                                type="submit"
+                                className="auth-register text-indigo-600 border-indigo-300 border hover:bg-indigo-300 hover:text-white font-bold py-2 px-4 rounded-xl mr-2 transition duration-300 ease-in-out"
+                            >
+                                <Link
+                                    to="/register"
+                                    className="text-sm font-semibold leading-6"
+                                >
+                                    Register
+                                </Link>
+                            </button>
+                            <button
+                                type="submit"
+                                className="auth-login bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out"
+                            >
+                                <Link
+                                    to="/login"
+                                    className="text-sm font-semibold leading-6 text-white"
+                                >
+                                    Login
+                                </Link>
+                            </button>
+                        </>
+                    ) : (
+                        <div className="flex flex-row items-center gap-3">
+                            <p className="text-sm font-semibold leading-6 text-indigo-600">
+                                {authenticatedUser.firstname}&nbsp;
+                                {authenticatedUser.lastname}
+                            </p>
+                            <button className="flex flex-row items-center gap-2 auth-login bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-4 rounded-xl transition duration-300 ease-in-out">
+                                <Link
+                                    onClick={handleLogout}
+                                    to="/"
+                                    className="text-sm font-semibold leading-6 text-white"
+                                >
+                                    Logout
+                                </Link>
+                                <i className="material-icons">logout</i>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </nav>
             <Dialog
@@ -205,35 +265,58 @@ const Header = () => {
                     <div className="mt-1 flow-root">
                         <div className="-my-3 divide-y">
                             <div className="space-y-2 py-6">
+                                {!authenticatedUser ? (
+                                    <></>
+                                ) : (
+                                    <div className="flex flex-row items-center text-indigo-600 gap-3 border rounded-lg p-2">
+                                        <i className="material-icons">
+                                            waving_hand
+                                        </i>
+                                        <p className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7">
+                                            Hai,&nbsp;
+                                            {authenticatedUser.firstname}
+                                            &nbsp;
+                                            {authenticatedUser.lastname}
+                                        </p>
+                                    </div>
+                                )}
                                 <Link
                                     to="/"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
+                                    className="flex flex-row items-center gap-2 -mx-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
                                     onClick={handleMenuClick}
                                 >
+                                    <i className="material-icons">home</i>
                                     Dashboard
                                 </Link>
                                 <Link
                                     to="/desaku"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
+                                    className="flex flex-row items-center gap-2 -mx-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
                                     onClick={handleMenuClick}
                                 >
+                                    <i className="material-icons">place</i>
                                     Desaku
                                 </Link>
                                 <Disclosure as="div" className="-mx-3">
                                     {({ open }) => (
                                         <>
-                                            <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white">
-                                                Program
-                                                <ChevronDownIcon
-                                                    className={classNames(
-                                                        open
-                                                            ? "rotate-180"
-                                                            : "",
-                                                        "h-5 w-5 flex-none"
-                                                    )}
-                                                    aria-hidden="true"
-                                                />
-                                            </Disclosure.Button>
+                                            <div className="flex flex-row items-center gap-2 w-full justify-between rounded-lg pl-3 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white">
+                                                <i className="material-icons">
+                                                    event
+                                                </i>
+                                                <Disclosure.Button className="flex flex-row items-center w-full justify-between rounded-lg py-2 pr-3.5 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white">
+                                                    Program
+                                                    <ChevronDownIcon
+                                                        className={classNames(
+                                                            open
+                                                                ? "rotate-180"
+                                                                : "",
+                                                            "h-5 w-5 flex-none"
+                                                        )}
+                                                        aria-hidden="true"
+                                                    />
+                                                </Disclosure.Button>
+                                            </div>
+
                                             <Disclosure.Panel className="mt-2 space-y-2">
                                                 {[...module].map((item) => (
                                                     <Disclosure.Button
@@ -255,42 +338,63 @@ const Header = () => {
 
                                 <Link
                                     to="/blog"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
+                                    className="flex flex-row items-center gap-2 -mx-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
                                     onClick={handleMenuClick}
                                 >
+                                    <i className="material-icons">newspaper</i>
                                     Blog
                                 </Link>
                                 <Link
                                     to="/tentang"
-                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
+                                    className="flex flex-row items-center gap-2 -mx-3 rounded-lg px-3 py-2 text-base font-semibold leading-7 text-slate-700 hover:bg-slate-500 hover:text-white"
                                     onClick={handleMenuClick}
                                 >
+                                    <i className="material-icons">info</i>
                                     Tentang
                                 </Link>
                             </div>
                             <div className="py-6 text-right">
-                                <button
-                                    onClick={handleMenuClick}
-                                    className="text-indigo-600 border-indigo-300 border hover:bg-indigo-300 hover:text-white font-bold py-2 px-3 rounded-xl mr-2 transition duration-300 ease-in-out"
-                                >
-                                    <Link
-                                        to="/register"
-                                        className="block rounded-lg text-sm leading-7"
+                                {!authenticatedUser ? (
+                                    <>
+                                        <button
+                                            type="submit"
+                                            onClick={handleMenuClick}
+                                            className="text-indigo-600 border-indigo-300 border hover:bg-indigo-300 hover:text-white font-bold py-2 px-3 rounded-xl mr-2 transition duration-300 ease-in-out"
+                                        >
+                                            <Link
+                                                to="/register"
+                                                className="block rounded-lg text-sm leading-7"
+                                            >
+                                                Register
+                                            </Link>
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            onClick={handleMenuClick}
+                                            className="bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-3 rounded-xl transition duration-300 ease-in-out"
+                                        >
+                                            <Link
+                                                to="/login"
+                                                className="block rounded-lg text-sm leading-7"
+                                            >
+                                                Login
+                                            </Link>
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex flex-row gap-2 items-center bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-3 rounded-xl transition duration-300 ease-in-out"
                                     >
-                                        Register
-                                    </Link>
-                                </button>
-                                <button
-                                    onClick={handleMenuClick}
-                                    className="bg-indigo-600 hover:opacity-50 text-white font-bold py-2 px-3 rounded-xl transition duration-300 ease-in-out"
-                                >
-                                    <Link
-                                        to="/login"
-                                        className="block rounded-lg text-sm leading-7"
-                                    >
-                                        Login
-                                    </Link>
-                                </button>
+                                        <Link
+                                            to="/"
+                                            className="block rounded-lg text-sm leading-7"
+                                        >
+                                            Logout
+                                        </Link>
+                                        <i className="material-icons">logout</i>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
