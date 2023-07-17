@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Desaku from "./pages/Desaku";
 import Program from "./pages/Program";
 import Blog from "./pages/Blog";
+import CreateBlog from "./pages/CreateBlog";
 import Tentang from "./pages/Tentang";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -56,6 +57,7 @@ function App() {
                     <Route path="/desaku" element={<Desaku />} />
                     <Route path="/program" element={<Program />} />
                     <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/create" element={<CreateBlog />} />
                     <Route path="/tentang" element={<Tentang />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />

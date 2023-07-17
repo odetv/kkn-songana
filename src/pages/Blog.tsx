@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { base_api_url } from "../App";
+import CKEditorViewer from "../components/CKEditorViewer";
 
 export default function Blog() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -32,7 +33,7 @@ export default function Blog() {
                         Blog & Galery
                     </h1>
                     <h1 className="text-center lg:text-lg font-bold text-slate-600">
-                        Lihat kegiatan kami selama bertugas
+                        Yuk buat postingan blog terbaru
                     </h1>
                 </div>
                 <div className="mx-auto max-w-screen-xl grid xl:grid-cols-4 xl:gap-6 lg:grid-cols-3 lg:gap-5 md:grid-cols-2 md:gap-6">
@@ -85,7 +86,9 @@ export default function Blog() {
                                 </h3>
                                 <div id="desc" className="truncate">
                                     <p className="text-sm mb-2 text-slate-600">
-                                        {post.news_content}
+                                        <CKEditorViewer
+                                            content={post.news_content}
+                                        />
                                     </p>
                                 </div>
                                 <Link
