@@ -81,7 +81,7 @@ const CreateBlog: React.FC = () => {
                                 Deskripsi
                             </label>
                             <CKEditorWrapper
-                                content={newsContent}
+                                value={newsContent}
                                 onChange={setNewsContent}
                             />
                         </div>
